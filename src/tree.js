@@ -93,7 +93,6 @@ class Tree {
             let rightSubTree = null;
             while (node.left != null) {
                 node = node.left;
-                // traverseLeft(node.left);
             }
             rightSubTree = node.right;
             return [node, rightSubTree];
@@ -113,8 +112,9 @@ class Tree {
                 // if value = data, then we need to check if it has children and how many children it has
                 if (node.left !== null && node.right !== null) {
                     // if there are 2 children
-                    // 1) recursively traverse left subtree until there are no more lefts
-                    // 2)
+                    // 1) move to our node's right subtree
+                    // 2) traverse the left side of right subtree until you reach null
+                    // 3) replace our node with left side value, then stitch left node children onto the parent node of the left node
 
                     let [targetNode, rightSubTree] = traverseLeft(node.right);
                     node.data = targetNode.data;
@@ -151,10 +151,113 @@ class Tree {
                 }
             }
         }
-        // function to traverse the left subtree until we reach a null
-
         traverseBST(value, this.root, parentNode);
     }
+
+    // find(value) returns the node with the given value
+    find(value) {
+        // 1) traverse the BST... condition for traversal?
+        // 2) if node = value, return it
+        // 3) if not, recursively do this to both left and right branches of node
+        function traverseBST(value, node) {
+            if (node === null) {
+                return `${value} does not exist in the BST`;
+            }
+            if (value === node.data) {
+                return node;
+            }
+            if (value < node.data) {
+                return traverseBST(value, node.left);
+            }
+            if (value > node.data) {
+                return traverseBST(value, node.right);
+            }
+        }
+        return traverseBST(value, this.root);
+    }
+
+    // levelOrder(callback) levelOrder accepts a callback function which it will use on every
+    // node in the tree, traversing them breadth first.
+    // (basically like forEach, but for our BST)
+    // we're going to use a queue to accomplish this****
+    // 1) add current (root) node to the queue
+    levelOrder(callBack) {
+        // put catch statement if we don't have callback function
+        if (typeof callBack !== 'function') {
+            throw new Error('Callback function not provided');
+        }
+        let queue = [];
+        queue.push(this.root);
+        let currentNode = null;
+
+        while (queue.length > 0) {
+            // 1) take first node from queue
+            currentNode = queue.shift();
+            // 2) use callback function with it
+            callBack(currentNode);
+            // 3) add it's children to the queue
+            if (currentNode.left !== null) {
+                queue.push(currentNode.left);
+            }
+            if (currentNode.right !== null) {
+                queue.push(currentNode.right);
+            }
+        }
+    }
+    // iterative implementation works, now let's try recursive implementation
+    // base case(terminating condition): When queue is empty
+    // recursive case: when next item is not null?
+    levelOrderRec(callBack) {
+        // check for callBack function first
+        if (typeof callBack !== 'function') {
+            throw new Error('Callback function not provided');
+        }
+        // initialized the queue
+        let queue = [];
+        queue.push(this.root);
+
+        function helper(callBack, queue) {
+            // 1) take first node from queue
+            let currentNode = queue.shift();
+            // 2) do stuff to first node
+            callBack(currentNode);
+            // console.log(currentNode.data);
+            // 3) add it's children to the queue
+            if (currentNode.left !== null) {
+                queue.push(currentNode.left);
+            }
+            if (currentNode.right !== null) {
+                queue.push(currentNode.right);
+            }
+            if (queue.length > 0) {
+                helper(callBack, queue);
+            }
+        }
+        helper(callBack, queue);
+    }
+
+    // inOrder(callBack)
+    // <left, right, root>
+    // Do the same thing as level order, except traverse the tree in "in order" order
+
+    // preOrder(callBack)
+    // <root, left, right>
+    // terminating condition: root == null
+    // recursive case:
+    preOrder(callBack) {
+        let root = this.root;
+        function helper(node, callBack) {
+            if (node === null) return;
+            console.log(node.data);
+            helper(node.left, callBack);
+            helper(node.right, callBack);
+        }
+        helper(root, callBack);
+    }
+
+    // postOrder(callBack)
+    // <left, right, root>
+    postOrder(callBack) {}
 }
 
 export default Tree;

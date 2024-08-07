@@ -45,21 +45,25 @@ prettyPrint(test.root);
 console.log('----------delete 8----------------');
 test.deleteItem(8);
 prettyPrint(test.root);
+// console.log(test.find(23));
+// console.log(test.find(17));
+// console.log(test.find(4));
 
-// testing destructuring
-// function tester(x) {
-//     let y = x + 1;
-//     let z = x + 2;
-//     return [y, z];
-// }
+console.log('----------levelOrderTest----------------');
 
-// let [yy, zz] = tester(1);
-// console.log(yy);
-// console.log(zz);
+function callback(node) {
+    node.data += 1;
+}
+test.levelOrder(callback);
+prettyPrint(test.root);
 
-// let test4 = new Tree([50, 30, 20, 40, 32, 34, 36, 50, 70, 60, 65, 80, 75, 85]);
-// test4.buildTree;
-// prettyPrint(test4.root);
-// test4.deleteItem(32);
-// prettyPrint(test4.root);
-// console.log('--------------------------');
+console.log('----------levelOrderTestRec----------------');
+function callBack2(node) {
+    node.data += 5;
+}
+test.levelOrderRec(callBack2);
+prettyPrint(test.root);
+
+console.log('----------preOrderTest----------------');
+test.preOrder(1);
+// prettyPrint(test.root);
