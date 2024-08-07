@@ -237,19 +237,42 @@ class Tree {
     }
 
     // inOrder(callBack)
-    // <left, right, root>
+    // <left, root, right>
     // Do the same thing as level order, except traverse the tree in "in order" order
-
+    inOrder(callBack) {
+        if (typeof callBack !== 'function') {
+            throw new Error('Callback function not provided');
+        }
+        let root = this.root;
+        function helper(node, callBack) {
+            if (node === null) return;
+            // 1) visit left subtree
+            helper(node.left, callBack);
+            // 3) visit root (print/ callback on root)
+            // console.log(node.data);
+            callBack(node);
+            // 3) visit right subtree
+            helper(node.right, callBack);
+        }
+        helper(root, callBack);
+    }
     // preOrder(callBack)
     // <root, left, right>
     // terminating condition: root == null
     // recursive case:
     preOrder(callBack) {
+        if (typeof callBack !== 'function') {
+            throw new Error('Callback function not provided');
+        }
         let root = this.root;
         function helper(node, callBack) {
             if (node === null) return;
-            console.log(node.data);
+            // 1) visit root
+            // console.log(node.data);
+            callBack(node);
+            // 2) visit left subtree
             helper(node.left, callBack);
+            // 3) visit right subtree
             helper(node.right, callBack);
         }
         helper(root, callBack);
@@ -257,7 +280,42 @@ class Tree {
 
     // postOrder(callBack)
     // <left, right, root>
-    postOrder(callBack) {}
+    postOrder(callBack) {
+        if (typeof callBack !== 'function') {
+            throw new Error('Callback function not provided');
+        }
+        let root = this.root;
+        function helper(node, callBack) {
+            if (node === null) return;
+            // 1) visit left subtree
+            helper(node.left, callBack);
+            // 2) visit right subtree
+            helper(node.right, callBack);
+            // 3) visit root (print/ callback on root)
+            // console.log(node.data);
+            callBack(node);
+        }
+        helper(root, callBack);
+    }
+
+    // height(node) function that returns the given node's height
+    // height is defined as the number of edges in the longest path from a given node to a leaf node
+    // 1) traverse to/ find the node
+    // 2) traverse from the node to the deepest leaf
+    // we don't want to double count the same level though
+    // maybe we need to implement a queue similar to levelOrder?
+    height(node) {
+        function helper(node) {
+            if (node === null) return -1;
+            // subtract 1 because we're counting nodes instead of edges
+
+            //
+            let leftHeight = helper(node.left);
+            let rightHeight = helper(node.right);
+            return Math.max(leftHeight, rightHeight) + 1;
+        }
+        return helper(node);
+    }
 }
 
 export default Tree;

@@ -65,5 +65,15 @@ test.levelOrderRec(callBack2);
 prettyPrint(test.root);
 
 console.log('----------preOrderTest----------------');
-test.preOrder(1);
+test.preOrder(callback);
 // prettyPrint(test.root);
+console.log('----------inOrderTest----------------');
+test.inOrder(callback);
+// prettyPrint(test.root);
+console.log('----------inOrderTest----------------');
+prettyPrint(test.root);
+test.postOrder(callBack2);
+console.log('----------heightTest----------------');
+prettyPrint(test.root);
+console.log(test.root.left);
+console.log(test.height(test.root.left.right));
