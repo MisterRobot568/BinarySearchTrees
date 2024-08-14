@@ -1,94 +1,50 @@
 import Tree from './tree.js';
 import Node from './node.js';
-let array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-let test = new Tree(array);
-console.log(test.root);
-console.log(test.root.right);
 
-// function expression for printing our BST:
-const prettyPrint = (node, prefix = '', isLeft = true) => {
-    if (node === null) {
-        return;
+//  TESTING
+console.log('1) create a BST from an array of random numbers <100');
+function generateRandomArray(length) {
+    const array = [];
+    for (let i = 0; i < length; i++) {
+        // Generate a random number between 0 and 99
+        const randomNumber = Math.floor(Math.random() * 100);
+        array.push(randomNumber);
     }
-    if (node.right !== null) {
-        prettyPrint(node.right, `${prefix}${isLeft ? '│   ' : '    '}`, false);
-    }
-    console.log(`${prefix}${isLeft ? '└── ' : '┌── '}${node.data}`);
-    if (node.left !== null) {
-        prettyPrint(node.left, `${prefix}${isLeft ? '    ' : '│   '}`, true);
-    }
-};
-
-// BST print
-prettyPrint(test.root);
-// insert testing
-test.insert(10);
-test.insert(7);
-test.insert(225);
-test.insert(227);
-test.insert(0);
-prettyPrint(test.root);
-console.log('--------------------------');
-
-test.deleteItem(0);
-prettyPrint(test.root);
-console.log('--------------------------');
-test.deleteItem(5);
-test.deleteItem();
-prettyPrint(test.root);
-console.log('----------delete 67----------------');
-test.deleteItem(67);
-prettyPrint(test.root);
-console.log('----------delete 225----------------');
-test.deleteItem(225);
-prettyPrint(test.root);
-console.log('----------delete 8----------------');
-test.deleteItem(8);
-prettyPrint(test.root);
-// console.log(test.find(23));
-// console.log(test.find(17));
-// console.log(test.find(4));
-
-console.log('----------levelOrderTest----------------');
-
-function callback(node) {
-    node.data += 1;
+    return array;
 }
-test.levelOrder(callback);
-prettyPrint(test.root);
 
-console.log('----------levelOrderTestRec----------------');
-function callBack2(node) {
-    node.data += 5;
-}
-test.levelOrderRec(callBack2);
-prettyPrint(test.root);
+let arr = generateRandomArray(20);
+let bst = new Tree(arr);
+prettyPrint(bst.root);
+console.log('2) confirm the tree is balanced by calling isBalanced');
+console.log(bst.isBalanced());
 
-console.log('----------preOrderTest----------------');
-test.preOrder(callback);
-// prettyPrint(test.root);
-console.log('----------inOrderTest----------------');
-test.inOrder(callback);
-// prettyPrint(test.root);
-console.log('----------inOrderTest----------------');
-prettyPrint(test.root);
-test.postOrder(callBack2);
-console.log('----------heightTest----------------');
-prettyPrint(test.root);
-console.log(test.root.left);
-console.log(test.height(test.root.left.right));
-console.log('----------depthTest----------------');
-prettyPrint(test.root);
-let currentNode = test.root.right.right.right;
+console.log('3) Print out all element in level, pre, and in post and in order');
 
-console.log(currentNode.data);
-console.log(test.depth(currentNode));
-console.log('----------Balanced Test----------------');
-test.insert(7000);
-test.insert(8000);
-test.insert(9000);
-prettyPrint(test.root);
-console.log(test.isBalanced());
-console.log('----------Rebalance Test----------------');
-console.log(test.rebalance());
-prettyPrint(test.root);
+// bst.levelOrder((node) => [console.log(node.data)]);
+// bst.inOrder((node) => [console.log(node.data)]);
+// bst.preOrder((node) => [console.log(node.data)]);
+// bst.postOrder((node) => [console.log(node.data)]);
+
+console.log('4) Unbalance the tree by adding several numbers > 100');
+bst.insert(200);
+bst.insert(101);
+bst.insert(302);
+bst.insert(197);
+bst.insert(169);
+prettyPrint(bst.root);
+
+console.log('5) confirm that the tree is unbalanced by calling isBalanced');
+console.log(bst.isBalanced());
+console.log('6) Balance the tree by calling rebalance');
+bst.rebalance();
+prettyPrint(bst.root);
+
+console.log('7) confirm the tree is balanced by called isBalanced');
+console.log(bst.isBalanced());
+console.log('8) Print out all element in level, pre, and in post and in order');
+
+// bst.levelOrder((node) => [console.log(node.data)]);
+// bst.inOrder((node) => [console.log(node.data)]);
+// bst.preOrder((node) => [console.log(node.data)]);
+// bst.postOrder((node) => [console.log(node.data)]);
