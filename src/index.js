@@ -77,3 +77,18 @@ console.log('----------heightTest----------------');
 prettyPrint(test.root);
 console.log(test.root.left);
 console.log(test.height(test.root.left.right));
+console.log('----------depthTest----------------');
+prettyPrint(test.root);
+let currentNode = test.root.right.right.right;
+
+console.log(currentNode.data);
+console.log(test.depth(currentNode));
+console.log('----------Balanced Test----------------');
+test.insert(7000);
+test.insert(8000);
+test.insert(9000);
+prettyPrint(test.root);
+console.log(test.isBalanced());
+console.log('----------Rebalance Test----------------');
+console.log(test.rebalance());
+prettyPrint(test.root);

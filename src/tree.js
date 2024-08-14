@@ -155,6 +155,8 @@ class Tree {
     }
 
     // find(value) returns the node with the given value
+    // potential issue with implementation: find(value) assumes that the binary search tree is built properly
+    // if value is added using the insert method, then it may bug
     find(value) {
         // 1) traverse the BST... condition for traversal?
         // 2) if node = value, return it
@@ -309,12 +311,83 @@ class Tree {
             if (node === null) return -1;
             // subtract 1 because we're counting nodes instead of edges
 
-            //
+            // this code is confusing, try to understand better later
             let leftHeight = helper(node.left);
             let rightHeight = helper(node.right);
             return Math.max(leftHeight, rightHeight) + 1;
         }
         return helper(node);
+    }
+
+    // depth(node) returns a node's depth. The number of edges in the path
+    // from a given node in a tree to the tree's root node
+    // can we travel back up to the root node?
+
+    // 1) start at the root node, traverse in the same way we did height
+    depth(node) {
+        // let root = this.root;
+        function helper(currentNode, root) {
+            // if the root is null, return -1 indicating that the node is not found
+            if (root === null) return -1;
+            if (currentNode === root) {
+                return 0;
+            }
+            // recursively search in the left and right subtree, increase depth by 1
+            let leftDepth = helper(currentNode, root.left);
+            let rightDepth = helper(currentNode, root.right);
+            // return Math.max(leftDepth, rightDepth) + 1;
+            // if node is found in either the left or right subtree, increase the depth by 1
+            if (leftDepth !== -1) {
+                return leftDepth + 1;
+            } else if (rightDepth !== -1) {
+                return rightDepth + 1;
+            } else {
+                // if the node is not found in either subtree, return -1
+                return -1;
+            }
+        }
+        return helper(node, this.root);
+    }
+
+    // isBalanced() method checks if a tree is balanced
+    // a tree is balanced if the difference in heights of the left subtree and
+    // and the right subtree of every node is not more than 1
+    isBalanced() {
+        // think of the base case. If one subtree is > +1 length over the other subtree is balanced.
+        // base case: when node is null
+        // 1) look at a node
+        // 2) if one child has a child and the other does not have a child, is not balanced
+        let self = this;
+        // within the helper function, the context of "this" changes. So we store "this" in a variable
+        // which we can use in a helper function
+        function helper(node) {
+            if (node === null) {
+                return true; // an empty subtree is balanced
+            }
+            let leftHeight = self.height(node.left);
+            let rightHeight = self.height(node.right);
+
+            if (Math.abs(leftHeight - rightHeight) > 1) {
+                // compare heights of left and right subtree
+                return false;
+            }
+
+            return helper(node.left) && helper(node.right); // recursively call on left and right subtree
+        }
+        return helper(this.root);
+    }
+    // rebalance() function rebalances an unbalanced tree
+    // 1) use traversal method to provide a new array to buildtree function
+    rebalance() {
+        // can we use levelOrder() for this? provide it with a helper function to add node to array
+        let nodesArray = [];
+        // levelorder to traverse each node, array function to add the data from each node to the nodesArray
+        this.levelOrder((node) => {
+            nodesArray.push(node.data);
+        });
+
+        let newTree = this.buildTree(nodesArray);
+        this.root = newTree;
     }
 }
 
